@@ -77,19 +77,28 @@ public class XLUtils {
         return data;
     }
 
-    public static void setCellData(String xlfile,String xlsheet,int rownum,int colnum,String data) throws IOException
-    {
-        fi=new FileInputStream(xlfile);
-        wb=new XSSFWorkbook(fi);
-        ws=wb.getSheet(xlsheet);
-        row=ws.getRow(rownum);
-        cell=row.createCell(colnum);
-        cell.setCellValue(data);
-        fo=new FileOutputStream(xlfile);
-        wb.write(fo);
-        wb.close();
-        fi.close();
-        fo.close();
-    }
+ public static void setCellData(String xlsfilePath, String xlsheet, int rowNum, int colNum, String data) {
+
+        try {
+            fi = new FileInputStream(xlsfilePath);
+            wb = new XSSFWorkbook(fi);
+            ws = wb.getSheet(xlsheet);
+            if(ws==null){
+                ws= wb.createSheet(xlsheet);
+            }
+            row = ws.getRow(rowNum);
+
+            if(row==null){
+                row=ws.createRow(rowNum);
+            }
+            cell = row.createCell(colNum);
+            cell.setCellValue(data);
+            fo = new FileOutputStream(xlsfilePath);
+            wb.write(fo);
+            //wb.close();
+            fi.close();
+            fo.close();
+        } catch (IOException e) {
+        }
 
 }
